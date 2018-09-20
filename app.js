@@ -8,7 +8,9 @@ const Post = mongoose.model("Post", {
   posts: String,
   title: String,
   UserName: String,
-  PW: String
+  PW: String,
+  date: { type: Date, default: Date.now },
+  count: { type: Number, default: 0 }
 }); // 스키마를 지정? 해주는거 같다
 const bodyParser = require("body-parser"); // bodyParser 는 form사용 가능하게 해주는거 같다
 app.use(bodyParser.json()); // 형태는 json 형태로
@@ -24,10 +26,51 @@ function reverseChangeNewlineString(str) {
 // Routes
 // index Pages
 app.get("/", (req, res) => {
-  const query = req.query; // 자바스크립트 쿼리 스트링 만 추출 (뭔가했다)
-  Post.find({}, (err, results) => {
-    // mongoDB에서 데이터 찾기
-    res.render("index", { results: results }); // results 의 값 랜더링
+  var page = req.param("page");
+  if (page == null || page == 0) {
+    page = 1;
+  }
+  var intPage = parseInt(page);
+  var totalPage = 1;
+  const countList = 10;
+  const conutPage = 10;
+  Post.count({}, (err, totalCount) => {
+    if (err) res.sendStatus(500);
+    totalPage = Math.ceil(totalCount / countList);
+    if (intPage > totalPage) {
+      page = totalPage;
+      intPage = totalPage;
+    }
+    var skipSize = (intPage - 1) * 10;
+    var startPage = Math.floor((intPage - 1) / 10) * 10 + 1;
+    var endPage = startPage + conutPage - 1;
+    if (page > 6) {
+      endPage = intPage + 4;
+      startPage = intPage - 5;
+    }
+    if (endPage > totalPage) {
+      endPage = totalPage;
+    }
+    Post.find({})
+      .sort({ date: -1 })
+      .skip(skipSize)
+      .limit(countList)
+      .then(results => {
+        res.render("index", {
+          results: results,
+          pagination: totalPage,
+          start: startPage,
+          end: endPage,
+          page: page,
+          intPage: intPage,
+          totalCount: totalCount
+        });
+      })
+      .catch(err => {
+        res.render("index", {
+          results: ""
+        });
+      });
   });
 });
 
@@ -48,15 +91,24 @@ app.get("/write", (req, res) => {
 
 app.get("/viewPage", (req, res) => {
   const query = req.query;
-  Post.find({ _id: query.id }, (err, result) => {
-    r = result[0];
-    r.posts = reverseChangeNewlineString(r.posts);
-    res.render("viewPage", { result: r });
+  Post.findOne({ _id: query.id }, (err, result) => {
+    result.posts = reverseChangeNewlineString(result.posts);
+    result.count += 1;
+    result.save(function(err) {
+      res.render("viewPage", { result: result });
+    });
   });
 });
 app.get("/postUpdate", (req, res) => {
   const query = req.query;
-  res.redirect("/write?id=" + query.id);
+  Post.findById(query.id, function(err, post) {
+    console.log(query);
+    if (query.JSPW == post.PW) {
+      res.sendStatus(200);
+    } else {
+      res.sendStatus(500);
+    }
+  });
 });
 
 // API
@@ -74,11 +126,6 @@ app.post("/addpost", (req, res) => {
 });
 app.delete("/postDel", (req, res) => {
   const query = req.query;
-  /*Post.remove(
-    {
-      $and: [{ _id: query.id }, { PW: query.JSPW }]
-    }
-  ).then(()=>{})*/
   Post.findById(query.id, function(err, post) {
     if (query.JSPW == post.PW) {
       Post.remove({
@@ -99,17 +146,13 @@ app.put("/update", (req, res) => {
   Post.findById(query.id, function(err, post) {
     if (err) return res.status(500).json({ error: "database failure" });
     if (!post) return res.status(404).json({ error: "post not found" });
-    if (query.JSPW == post.PW) {
-      if (req.body.title) post.title = req.body.title;
-      if (req.body.posts) post.posts = req.body.posts;
-      if (req.body.UserName) post.UserName = req.body.UserName;
-      post.save(function(err) {
-        if (err) res.status(500).json({ error: "failed to update" });
-        res.sendStatus(200);
-      });
-    } else {
-      res.sendStatus(500);
-    }
+    if (req.body.title) post.title = req.body.title;
+    if (req.body.posts) post.posts = req.body.posts;
+    if (req.body.UserName) post.UserName = req.body.UserName;
+    post.save(function(err) {
+      if (err) res.status(500).json({ error: "failed to update" });
+      res.sendStatus(200);
+    });
   });
 });
 // Listening

@@ -1,12 +1,17 @@
 @import url(http://fonts.googleapis.com/earlyaccess/notosanskr.css);
 .Rectangle-1560-copy {
-  margin: 97px auto;
-  width: 829px;
+  margin: 59px auto 25px;
+  width: 926px;
   background-color: #ffffff;
   box-shadow: 1.3px 1.5px 1px 0 rgba(0, 0, 0, 0.1);
+  border: 1px solid #eeeeee;
+  border-collapse: collapse;
+}
+h1 {
+  margin: 20px auto;
 }
 .Rectangle-1560 {
-  width: 829px;
+  width: 926px;
   background-color: #f8f8f8;
 }
 .title {
@@ -56,4 +61,77 @@ a:active {
 a:hover {
   text-decoration: underline;
   color: #555555;
+}
+.buttonLink {
+  text-align: right;
+  margin: 0 auto;
+  width: 926px;
+}
+th,
+td {
+  border: 1px solid #eeeeee;
+}
+body {
+  background-color: #eeeeee;
+}
+
+.pageLink {
+  text-align: center;
+  width: 926px;
+  height: 61px;
+  background-color: #f7f7f7;
+  margin: 0 auto;
+}
+.back {
+  margin: 15px 16px 23px 15px;
+  width: 110px;
+  height: 31px;
+  background-color: #f7f7f7;
+  border: solid 1px #e1dedd;
+  font-size: 12px;
+  line-height: 18px;
+  color: #555555;
+}
+.start {
+  margin: 15px 16px 23px 15px;
+  width: 35px;
+  height: 31px;
+  background-color: #f7f7f7;
+  border: solid 1px #e1dedd;
+  font-size: 12px;
+  line-height: 18px;
+  color: #555555;
+}
+.end {
+  margin: 15px 23px 16px 15px;
+  width: 35px;
+  height: 31px;
+  background-color: #f7f7f7;
+  border: solid 1px #e1dedd;
+  font-size: 12px;
+  line-height: 18px;
+  color: #555555;
+}
+.go {
+  margin: 15px 23px 16px 15px;
+  width: 110px;
+  height: 31px;
+  background-color: #f7f7f7;
+  border: solid 1px #e1dedd;
+  font-size: 12px;
+  line-height: 18px;
+  color: #555555;
+}
+.nextPage {
+  margin: 26px 20px 24px 20px;
+  font-size: 16px;
+}
+.notPosts {
+  text-align: center;
+}
+.postsNumber {
+  text-align: center;
+  width: 45px;
+  margin: 0 auto;
+  padding: 0px 0px 0px 0px;
 }
