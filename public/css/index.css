@@ -26,11 +26,20 @@ th {
   letter-spacing: -0.4px;
   color: #777777;
 }
-.tdone {
+.tdOne {
   padding-left: 14px;
   font-family: "Noto Sans KR", sans-serif;
   font-size: 14px;
   font-weight: bold;
+  line-height: 28px;
+  letter-spacing: -0.4px;
+  text-align: left;
+  color: #333333;
+}
+.tdTwo {
+  padding-left: 14px;
+  font-family: "Noto Sans KR", sans-serif;
+  font-size: 14px;
   line-height: 28px;
   letter-spacing: -0.4px;
   text-align: left;
@@ -76,6 +85,7 @@ body {
 }
 
 .pageLink {
+  position: relative;
   text-align: center;
   width: 926px;
   height: 61px;
@@ -91,6 +101,7 @@ body {
   font-size: 12px;
   line-height: 18px;
   color: #555555;
+  cursor: pointer;
 }
 .start {
   margin: 15px 16px 23px 15px;
@@ -101,6 +112,7 @@ body {
   font-size: 12px;
   line-height: 18px;
   color: #555555;
+  cursor: pointer;
 }
 .end {
   margin: 15px 23px 16px 15px;
@@ -111,6 +123,7 @@ body {
   font-size: 12px;
   line-height: 18px;
   color: #555555;
+  cursor: pointer;
 }
 .go {
   margin: 15px 23px 16px 15px;
@@ -121,10 +134,14 @@ body {
   font-size: 12px;
   line-height: 18px;
   color: #555555;
+  cursor: pointer;
 }
-.nextPage {
-  margin: 26px 20px 24px 20px;
+.pageNum {
+  box-sizing: border-box;
+  padding: 18px;
   font-size: 16px;
+  display: inline-block;
+  width: 40px;
 }
 .notPosts {
   text-align: center;
@@ -134,4 +151,31 @@ body {
   width: 45px;
   margin: 0 auto;
   padding: 0px 0px 0px 0px;
+}
+.WB {
+  margin: 30px auto;
+  width: 50px;
+  height: 31px;
+  background-color: #f7f7f7;
+  border: solid 1px #e1dedd;
+  line-height: 18px;
+  color: #555555;
+  width: 75px;
+  height: 35px;
+  font-size: 15px;
+  cursor: pointer;
+}
+.buttonsB {
+  height: 60px;
+  width: 250px;
+  position: absolute;
+  top: 0;
+  right: 7px;
+}
+.buttonsA {
+  height: 60px;
+  width: 250px;
+  position: absolute;
+  top: 0;
+  left: 7px;
 }
