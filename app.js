@@ -2,7 +2,10 @@
 const express = require("express"); // express 사용
 const app = express(); // 위에꺼랑 같이 써야됨
 const mongoose = require("mongoose"); // mongoose 사용
-mongoose.connect("mongodb://localhost:27017/kyu-post"); // 커넥트해서 서버 주소랑 열 경로 지정
+mongoose.connect(
+  "mongodb://localhost:27017/kyu-post",
+  { useNewUrlParser: true }
+); // 커넥트해서 서버 주소랑 열 경로 지정
 const Post = mongoose.model("Post", {
   PostsNum: String,
   posts: String,
@@ -26,7 +29,7 @@ function reverseChangeNewlineString(str) {
 // Routes
 // index Pages
 app.get("/", (req, res) => {
-  var page = req.param("page");
+  var page = req.query.page;
   if (page == null || page == 0) {
     page = 1;
   }
@@ -34,7 +37,7 @@ app.get("/", (req, res) => {
   var totalPage = 1;
   const pageListCount = 10;
   const pageNumberConut = 10;
-  Post.count({}, (err, totalCount) => {
+  Post.countDocuments({}, (err, totalCount) => {
     if (err) res.sendStatus(500);
     totalPage = Math.ceil(totalCount / pageListCount);
     if (intPage > totalPage) {
@@ -77,7 +80,6 @@ app.get("/", (req, res) => {
 // write page
 app.get("/write", (req, res) => {
   const query = req.query;
-  console.log(query);
   if (query.id) {
     Post.find({ _id: query.id }, (err, result) => {
       r = result[0];
@@ -102,7 +104,6 @@ app.get("/viewPage", (req, res) => {
 app.get("/postUpdate", (req, res) => {
   const query = req.query;
   Post.findById(query.id, function(err, post) {
-    console.log(query);
     if (query.JSPW == post.PW) {
       res.sendStatus(200);
     } else {
@@ -128,7 +129,7 @@ app.delete("/postDel", (req, res) => {
   const query = req.query;
   Post.findById(query.id, function(err, post) {
     if (query.JSPW == post.PW) {
-      Post.remove({
+      Post.deleteOne({
         $and: [{ _id: query.id }, { PW: query.JSPW }]
       }).then(() => {
         res.sendStatus(200);
@@ -140,7 +141,6 @@ app.delete("/postDel", (req, res) => {
 });
 app.put("/update", (req, res) => {
   const query = req.query;
-  console.log(query);
 
   // update db query
   Post.findById(query.id, function(err, post) {
